@@ -2,10 +2,12 @@
 //MONGODB CONNECTION: mongodb+srv://Antonio:<password>@cluster0.5oksa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
-const stuffRoutes = require('./routes/router');
-//const Thing =  require('./models/sauces');
+
+const stuffRoutes = require('./routes/routes');
+const userRoutes =  require('./routes/user');
 
 mongoose.connect('mongodb+srv://Antonio:RVDhaf34IMTnrHQ9@cluster0.5oksa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
     .then (() => {
@@ -16,11 +18,10 @@ mongoose.connect('mongodb+srv://Antonio:RVDhaf34IMTnrHQ9@cluster0.5oksa.mongodb.
         console.error(error);
     });
     
-
 app.use(express.json());
-app.use('/models/sauces', stuffRoutes);
-
-
+app.use(bodyParser.json());
+app.use('/api/sauces', stuffRoutes);
+app.use('/api/auth', userRoutes);
 
 app.listen(8080, () => {
     console.log("Server Listening")

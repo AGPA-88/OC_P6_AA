@@ -1,13 +1,7 @@
-const express = require('express');
-const router = express.Router();
-
-const Thing = require('../models/sauces');
-
-// Middleware
+const Thing = require ('../models/sauces');
 
 //GET
-
-router.get('/', (req, res, next) => {
+exports.getSauces = (req, res, next) => {
     Thing.find().then(
         (sauces) => {
         res.status(200).json(sauces);
@@ -19,9 +13,9 @@ router.get('/', (req, res, next) => {
         });
         }
     );
-  });
-  
-  router.get('/:id', (req, res, next) => {
+  };
+
+exports.getSauce = (req, res, next) => {
     Thing.findOne({
       _id: req.params.id
     }).then(
@@ -35,11 +29,10 @@ router.get('/', (req, res, next) => {
         });
       }
     );
-  });
-  
-//POST
+  };
 
-  router.post('/', (req, res, next) => {
+//POST
+  exports.postSauce = (req, res, next) => {
     const sauce = new Thing({
       userId: req.body.userId,
       name: req.body.name,
@@ -63,11 +56,10 @@ router.get('/', (req, res, next) => {
         });
       }
     );
-  });
-  
-//PUT
+  };
 
-  router.put('/:id', (req,res) => {
+//PUT  
+  exports.putSauce = (req,res) => {
     Thing.findOne({
       _id: req.params.id
     }).then(
@@ -93,11 +85,10 @@ router.get('/', (req, res, next) => {
           }
         )
     })
-  });
-  
-//DELETE
-  
-  router.delete('/:id', (req, res, next) => {
+  };
+
+//DELETE 
+  exports.deleteSauce = (req, res, next) => {
     Thing.deleteOne({_id: req.params.id}).then(
       () => {
         res.status(200).json({
@@ -111,14 +102,10 @@ router.get('/', (req, res, next) => {
         });
       }
     );
-  });
- 
-//API Message
-  
-  router.use('/', (req,res) => {
+  };
+
+  exports.apiMsg = (req,res) => {
     res.status(200).json({
       message: "This API only authorizes GET, POST, PUT and DELETE"
     });
-  });
-
-module.exports = router;
+  };
