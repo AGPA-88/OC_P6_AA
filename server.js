@@ -5,9 +5,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
+const path = require('path');
 
-const stuffRoutes = require('./routes/routes');
+const saucesRoutes = require('./routes/routes');
 const userRoutes =  require('./routes/user');
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    next();
+  });
 
 mongoose.connect('mongodb+srv://Antonio:RVDhaf34IMTnrHQ9@cluster0.5oksa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
     .then (() => {
@@ -20,28 +28,11 @@ mongoose.connect('mongodb+srv://Antonio:RVDhaf34IMTnrHQ9@cluster0.5oksa.mongodb.
     
 app.use(express.json());
 app.use(bodyParser.json());
-app.use('/api/sauces', stuffRoutes);
+
+app.use('/images', express.static(path.join(__dirname, 'images')))
+app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
 
-app.listen(8080, () => {
+app.listen(3000, () => {
     console.log("Server Listening")
   })
-
-
-//Data Management
-// function getSauces(){
-//     return {id:200}
-// }
-
-// function  getSauceFromId(id){
-//     return sauces.find(sauce => sauce.id === id)
-// }
-
-//function postSauce (sauce){
-//    return sauces.push(sauce)
-//}
-
-//function putSauce() {
-
-//}
-//module.exports = server;
