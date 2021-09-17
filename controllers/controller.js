@@ -1,8 +1,8 @@
-const Thing = require ('../models/sauces');
+const Sauce = require ('../models/sauces');
 
 //GET
 exports.getSauces = (req, res, next) => {
-    Thing.find().then(
+    Sauce.find().then(
         (sauces) => {
         res.status(200).json(sauces);
         }
@@ -16,11 +16,11 @@ exports.getSauces = (req, res, next) => {
   };
 
 exports.getSauce = (req, res, next) => {
-    Thing.findOne({
+    Sauce.findOne({
       _id: req.params.id
     }).then(
-      (thing) => {
-        res.status(200).json(thing);
+      (sauce) => {
+        res.status(200).json(sauce);
       }
     ).catch(
       (error) => {
@@ -31,36 +31,36 @@ exports.getSauce = (req, res, next) => {
     );
   };
 
-//POST
-  exports.postSauce = (req, res, next) => {
-    const sauce = new Thing({
-      userId: req.body.userId,
-      name: req.body.name,
-      manufacturer: req.body.manufacturer,
-      description: req.body.description,
-      mainPepper: req.body.mainPepper,
-      imageUrl: req.body.imageUrl,
-      heat: req.body.heat,
-    });
+// //POST
+//   exports.postSauce = (req, res, next) => {
+//     const sauce = new Thing({
+//       userId: req.body.userId,
+//       name: req.body.name,
+//       manufacturer: req.body.manufacturer,
+//       description: req.body.description,
+//       mainPepper: req.body.mainPepper,
+//       imageUrl: req.body.imageUrl,
+//       heat: req.body.heat,
+//     });
   
-    sauce.save().then(
-      () => {
-        res.status(201).json({
-          message: 'Post saved successfully!'
-        });
-      }
-    ).catch(
-      (error) => {
-        res.status(400).json({
-          error: error
-        });
-      }
-    );
-  };
+//     sauce.save().then(
+//       () => {
+//         res.status(201).json({
+//           message: 'Post saved successfully!'
+//         });
+//       }
+//     ).catch(
+//       (error) => {
+//         res.status(400).json({
+//           error: error
+//         });
+//       }
+//     );
+//   };
 
 
   exports.likeSauce = (req, res, next) => {
-    Thing.findOne({_id: req.params.id}).then((sauce) => {
+    Sauce.findOne({_id: req.params.id}).then((sauce) => {
           if (req.body.like == 1 && sauce.usersLiked.includes(req.body.userId) === false) {
               sauce.usersLiked.push(req.body.userId)
               if (sauce.likes){
@@ -100,18 +100,50 @@ exports.getSauce = (req, res, next) => {
     };
 
 
+//MUTLER
+
+exports.createSauce = (req, res, next) => {
+  req.body.sauce = JSON.parse(req.body.sauce);
+  const url = req.protocol + '://' + req.get('host');
+  const sauce = new Sauce({
+    name: req.body.sauce.name,
+    manufacturer: req.body.sauce.manufacturer,
+    description: req.body.sauce.description,
+    mainPepper: req.body.sauce.mainPepper,
+    imageUrl: url + '/images/' + req.file.filename,
+    price: req.body.sauce.price,
+    heat: req.body.sauce.heat,
+    userId: req.body.sauce.userId
+  });
+  sauce.save().then(
+    () => {
+      res.status(201).json({
+        message: 'Post saved successfully!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};    
+
+
 //PUT  
   exports.putSauce = (req,res) => {
-    Thing.findOne({
+    const url = req.protocol + '://' + req.get('host');
+    Sauce.findOne({
       _id: req.params.id
     }).then(
-      (sauce) => {
+      (sauce) => {        
         sauce.userId =req.body.userId,
         sauce.name =req.body.name,
         sauce.manufacturer =req.body.manufacturer,
         sauce.mainPepper =req.body.mainPepper,
         sauce.heat =req.body.heat,
-        sauce.imageUrl =req.body.imageUrl
+        //sauce.imageUrl = url + '/images/' + req.file.filename
   
         sauce.save().then(
           () => {
@@ -131,7 +163,7 @@ exports.getSauce = (req, res, next) => {
 
 //DELETE 
   exports.deleteSauce = (req, res, next) => {
-    Thing.deleteOne({_id: req.params.id}).then(
+    Sauce.deleteOne({_id: req.params.id}).then(
       () => {
         res.status(200).json({
           message: 'Deleted!'
@@ -151,31 +183,3 @@ exports.getSauce = (req, res, next) => {
       message: "This API only authorizes GET, POST, PUT and DELETE"
     });
   };
-
-
-//MUTLER
-
-exports.createThing = (req, res, next) => {
-  req.body.thing = JSON.parse(req.body.thing);
-  const url = req.protocol + '://' + req.get('host');
-  const thing = new Thing({
-    title: req.body.thing.title,
-    description: req.body.thing.description,
-    imageUrl: url + '/images/' + req.file.filename,
-    price: req.body.thing.price,
-    userId: req.body.thing.userId
-  });
-  thing.save().then(
-    () => {
-      res.status(201).json({
-        message: 'Post saved successfully!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-};

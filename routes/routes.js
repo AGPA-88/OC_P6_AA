@@ -11,21 +11,21 @@ const multer = require('../middleware/multer-config');
 // Middleware
 
 //GET
-router.get('/', sauceCtrl.getSauces);  
-router.get('/:id', sauceCtrl.getSauce);
-router.get('/', userCtrl.getUsers);  
+router.get('/', auth, sauceCtrl.getSauces);  
+router.get('/:id', auth, sauceCtrl.getSauce);
+//router.get('/', userCtrl.getUsers);  
   
 //POST
-router.post('/', sauceCtrl.postSauce);
-router.post('/:id/like', sauceCtrl.likeSauce);
-router.post('/', auth, multer, sauceCtrl.createThing);
+//router.post('/', sauceCtrl.postSauce);
+router.post('/:id/like', auth, sauceCtrl.likeSauce);
+router.post('/', auth, multer, sauceCtrl.createSauce);
 
 //PUT
-router.put('/:id', sauceCtrl.putSauce);
-//router.post('/', auth, multer, stuffCtrl.createThing);
+router.put('/:id', auth, sauceCtrl.putSauce);
+router.put('/', auth, multer, sauceCtrl.putSauce);
   
 //DELETE
-router.delete('/:id', sauceCtrl.deleteSauce);
+router.delete('/:id', auth, sauceCtrl.deleteSauce);
  
 //API Message
 router.use('/', sauceCtrl.apiMsg);
