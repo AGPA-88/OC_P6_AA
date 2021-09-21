@@ -100,7 +100,7 @@ exports.getSauce = (req, res, next) => {
     };
 
 
-//MUTLER
+//POST
 
 exports.createSauce = (req, res, next) => {
   req.body.sauce = JSON.parse(req.body.sauce);
@@ -136,17 +136,21 @@ exports.createSauce = (req, res, next) => {
     Sauce.findOne({
       _id: req.params.id
     }).then(
-      (sauce) => {        
+      (sauce) => { 
+        console.log(req.body);
+        if(req.file){
+          sauce.imageUrl = url + '/images/' + req.file.filename
+          req.body = JSON.parse(req.body.sauce)
+          console.log(req.body);
+
+        }   
         sauce.userId =req.body.userId
         sauce.name =req.body.name
         sauce.description =req.body.description
         sauce.manufacturer =req.body.manufacturer
         sauce.mainPepper =req.body.mainPepper
         sauce.heat =req.body.heat
-        if(req.file){
-          sauce.imageUrl = url + '/images/' + req.file.filename
-        }        
-  
+     
         sauce.save().then(
           () => {
             res.status(201).json({
