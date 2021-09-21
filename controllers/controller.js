@@ -111,7 +111,6 @@ exports.createSauce = (req, res, next) => {
     description: req.body.sauce.description,
     mainPepper: req.body.sauce.mainPepper,
     imageUrl: url + '/images/' + req.file.filename,
-    price: req.body.sauce.price,
     heat: req.body.sauce.heat,
     userId: req.body.sauce.userId
   });
@@ -138,12 +137,15 @@ exports.createSauce = (req, res, next) => {
       _id: req.params.id
     }).then(
       (sauce) => {        
-        sauce.userId =req.body.userId,
-        sauce.name =req.body.name,
-        sauce.manufacturer =req.body.manufacturer,
-        sauce.mainPepper =req.body.mainPepper,
-        sauce.heat =req.body.heat,
-        //sauce.imageUrl = url + '/images/' + req.file.filename
+        sauce.userId =req.body.userId
+        sauce.name =req.body.name
+        sauce.description =req.body.description
+        sauce.manufacturer =req.body.manufacturer
+        sauce.mainPepper =req.body.mainPepper
+        sauce.heat =req.body.heat
+        if(req.file){
+          sauce.imageUrl = url + '/images/' + req.file.filename
+        }        
   
         sauce.save().then(
           () => {

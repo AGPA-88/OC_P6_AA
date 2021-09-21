@@ -68,8 +68,6 @@ exports.signup = (req, res, next) => {
             message: 'User not found!'
           });
         }
-        console.log(req.body.password);
-        console.log(user.password);
         bcrypt.compare(req.body.password, user.password).then(
           (valid) => {
             if (!valid) {
