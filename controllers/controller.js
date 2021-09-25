@@ -31,33 +31,6 @@ exports.getSauce = (req, res, next) => {
     );
   };
 
-// //POST
-//   exports.postSauce = (req, res, next) => {
-//     const sauce = new Thing({
-//       userId: req.body.userId,
-//       name: req.body.name,
-//       manufacturer: req.body.manufacturer,
-//       description: req.body.description,
-//       mainPepper: req.body.mainPepper,
-//       imageUrl: req.body.imageUrl,
-//       heat: req.body.heat,
-//     });
-  
-//     sauce.save().then(
-//       () => {
-//         res.status(201).json({
-//           message: 'Post saved successfully!'
-//         });
-//       }
-//     ).catch(
-//       (error) => {
-//         res.status(400).json({
-//           error: error
-//         });
-//       }
-//     );
-//   };
-
 
   exports.likeSauce = (req, res, next) => {
     Sauce.findOne({_id: req.params.id}).then((sauce) => {
@@ -112,7 +85,11 @@ exports.createSauce = (req, res, next) => {
     mainPepper: req.body.sauce.mainPepper,
     imageUrl: url + '/images/' + req.file.filename,
     heat: req.body.sauce.heat,
-    userId: req.body.sauce.userId
+    userId: req.body.sauce.userId,
+    likes: 0,
+    dislikes: 0,
+    usersLiked: [],
+    usersDisliked: []
   });
   sauce.save().then(
     () => {
