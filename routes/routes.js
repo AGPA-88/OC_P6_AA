@@ -18,9 +18,9 @@ router.post('/:id/like', auth, sauceCtrl.likeSauce);
 router.post('/', auth, multer, sauceCtrl.createSauce);
 
 //PUT
-router.put('/:id', auth, sauceCtrl.putSauce);
+//router.put('/:id', auth, sauceCtrl.putSauce);
 router.put('/:id', auth, multer, sauceCtrl.putSauce);
-//router.put('/:id', sauceCtrl.putSauce);
+router.put('/:id', sauceCtrl.putSauce);
 
 //DELETE
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
